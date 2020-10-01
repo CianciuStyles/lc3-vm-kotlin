@@ -1,5 +1,6 @@
 package io.github.cianciustyles
 
-fun main() {
-    println("Hello, world!")
+@ExperimentalUnsignedTypes
+fun main(vararg args: String) {
+    LC3VM().run(*args)
 }

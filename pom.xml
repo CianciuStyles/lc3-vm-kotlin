@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <kotlin.version>1.3.72</kotlin.version>
-        <kotlin.compiler.languageVersion>1.3</kotlin.compiler.languageVersion>
+        <kotlin.version>1.4.10</kotlin.version>
+        <kotlin.compiler.languageVersion>1.4</kotlin.compiler.languageVersion>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <main.class>io.github.cianciustyles.MainKt</main.class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -120,6 +120,7 @@
                 </executions>
                 <configuration>
                     <mainClass>${main.class}</mainClass>
+                    <commandlineArgs>lc3vm 2048.obj</commandlineArgs>
                 </configuration>
             </plugin>
             <plugin>
