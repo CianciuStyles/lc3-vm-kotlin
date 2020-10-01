@@ -18,6 +18,18 @@ class InstructionTest {
         assertThat(add).isInstanceOf(Add::class.java)
     }
 
+    @Test
+    fun testLoadIndirectEncoding() {
+        // given
+        val encoding = (0b1010 shl 12).toUShort()
+
+        // when
+        val add = Instruction.fetch(encoding)
+
+        // then
+        assertThat(add).isInstanceOf(LoadIndirect::class.java)
+    }
+
     @Test(expected = UnrecognisedInstructionException::class)
     fun testInvalidOpcode() {
         // given

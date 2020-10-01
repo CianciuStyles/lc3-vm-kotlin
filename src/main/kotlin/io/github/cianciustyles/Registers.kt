@@ -12,7 +12,13 @@ class Registers {
         registers[index.toInt()] = value
     }
 
-    fun setCondRegister(value: Short) {
+    fun getPC(): Short = registers[RegistersNames.PC.ordinal]
+
+    fun setPC(value: Short) {
+        registers[RegistersNames.PC.ordinal] = value
+    }
+
+    fun setCond(value: Short) {
         val newFlag = when {
             value > 0 -> {
                 ConditionFlags.POSITIVE
@@ -27,7 +33,7 @@ class Registers {
         registers[RegistersNames.COND.ordinal] = newFlag.value
     }
 
-    fun getCondRegister(): Short =
+    fun getCond(): Short =
         registers[RegistersNames.COND.ordinal]
 
     enum class RegistersNames {

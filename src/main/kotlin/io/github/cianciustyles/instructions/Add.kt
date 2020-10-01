@@ -1,5 +1,6 @@
 package io.github.cianciustyles.instructions
 
+import io.github.cianciustyles.Memory
 import io.github.cianciustyles.Registers
 
 @ExperimentalUnsignedTypes
@@ -21,16 +22,6 @@ class Add(encoding: UShort) : Instruction() {
         }
     }
 
-    private fun extendSign(x: Int, bitCount: Int): Short {
-        val num = if (x shr bitCount - 1 and 0b1 == 1) {
-            (0xFFFF shl bitCount) or x
-        } else {
-            x
-        }
-
-        return num.toShort()
-    }
-
     enum class Mode {
         REGISTER_MODE,
         IMMEDIATE_MODE;
@@ -42,7 +33,7 @@ class Add(encoding: UShort) : Instruction() {
         }
     }
 
-    override fun execute(registers: Registers) {
+    override fun execute(memory: Memory, registers: Registers) {
         val secondOperand: Short = if (mode == Mode.REGISTER_MODE) {
             registers[sourceRegister2!!]
         } else {
@@ -51,6 +42,6 @@ class Add(encoding: UShort) : Instruction() {
 
         val result = (registers[sourceRegister1] + secondOperand).toShort()
         registers[destinationRegister] = result
-        registers.setCondRegister(result)
+        registers.setCond(result)
     }
 }
