@@ -19,6 +19,18 @@ class InstructionTest {
     }
 
     @Test
+    fun testLoadBaseOffsetEncoding() {
+        // given
+        val encoding = (0b0110 shl 12).toUShort()
+
+        // when
+        val loadBaseOffset = Instruction.fetch(encoding)
+
+        // then
+        assertThat(loadBaseOffset).isInstanceOf(LoadBaseOffset::class.java)
+    }
+
+    @Test
     fun testLoadEncoding() {
         // given
         val encoding = (0b0010 shl 12).toUShort()

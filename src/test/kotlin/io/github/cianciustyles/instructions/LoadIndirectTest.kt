@@ -3,6 +3,7 @@ package io.github.cianciustyles.instructions
 import io.github.cianciustyles.ConditionFlags
 import io.github.cianciustyles.Memory
 import io.github.cianciustyles.Registers
+import io.github.cianciustyles.Utils.extendSign
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -37,7 +38,7 @@ class LoadIndirectTest {
 
         // then
         assertThat(loadIndirect.destinationRegister).isEqualTo(destinationRegister.toUShort())
-        assertThat(loadIndirect.pcOffset).isEqualTo(pcOffset.toShort())
+        assertThat(loadIndirect.pcOffset).isEqualTo(extendSign(pcOffset, 9))
         assertThat(registers[loadIndirect.destinationRegister]).isEqualTo(expectedResult)
         assertThat(registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
     }
@@ -60,7 +61,7 @@ class LoadIndirectTest {
 
         // then
         assertThat(loadIndirect.destinationRegister).isEqualTo(destinationRegister.toUShort())
-        assertThat(loadIndirect.pcOffset).isEqualTo(pcOffset.toShort())
+        assertThat(loadIndirect.pcOffset).isEqualTo(extendSign(pcOffset, 9))
         assertThat(registers[loadIndirect.destinationRegister]).isEqualTo(expectedResult)
         assertThat(registers.getCond()).isEqualTo(ConditionFlags.NEGATIVE.value)
     }
@@ -84,7 +85,7 @@ class LoadIndirectTest {
 
         // then
         assertThat(loadIndirect.destinationRegister).isEqualTo(destinationRegister.toUShort())
-        assertThat(loadIndirect.pcOffset).isEqualTo(pcOffset.toShort())
+        assertThat(loadIndirect.pcOffset).isEqualTo(extendSign(pcOffset, 9))
         assertThat(registers[loadIndirect.destinationRegister]).isEqualTo(expectedResult)
         assertThat(registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
     }

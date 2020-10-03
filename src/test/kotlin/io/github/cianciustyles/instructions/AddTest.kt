@@ -3,6 +3,7 @@ package io.github.cianciustyles.instructions
 import io.github.cianciustyles.ConditionFlags
 import io.github.cianciustyles.Memory
 import io.github.cianciustyles.Registers
+import io.github.cianciustyles.Utils.extendSign
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -64,8 +65,8 @@ class AddTest {
         assertThat(add.sourceRegister1).isEqualTo(sourceRegister1.toUShort())
         assertThat(add.mode).isEqualTo(Add.Mode.IMMEDIATE_MODE)
         assertThat(add.sourceRegister2).isNull()
-        assertThat(add.immediateValue).isEqualTo(extendSign(immediateValue))
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue)))
+        assertThat(add.immediateValue).isEqualTo(extendSign(immediateValue, 5))
+        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue, 5)))
     }
 
     @Test
@@ -88,8 +89,8 @@ class AddTest {
         assertThat(add.sourceRegister1).isEqualTo(sourceRegister1.toUShort())
         assertThat(add.mode).isEqualTo(Add.Mode.IMMEDIATE_MODE)
         assertThat(add.sourceRegister2).isNull()
-        assertThat(add.immediateValue).isEqualTo(extendSign(immediateValue))
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue)))
+        assertThat(add.immediateValue).isEqualTo(extendSign(immediateValue, 5))
+        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue, 5)))
     }
 
     @Test
@@ -151,16 +152,6 @@ class AddTest {
 
     private fun encodeImmediate(destinationRegister: Int, sourceRegister1: Int, immediateValue: Int) =
         ((0b0001 shl 12) or (destinationRegister shl 9) or (sourceRegister1 shl 6) or (1 shl 5) or immediateValue).toUShort()
-
-    private fun extendSign(x: Int, bitCount: Int = 5): Short {
-        val num = if (x shr bitCount - 1 and 0b1 == 1) {
-            (0xFFFF shl bitCount) or x
-        } else {
-            x
-        }
-
-        return num.toShort()
-    }
 
     private fun shortPlus(short1: Short, short2: Short): Short =
         (short1 + short2).toShort()
