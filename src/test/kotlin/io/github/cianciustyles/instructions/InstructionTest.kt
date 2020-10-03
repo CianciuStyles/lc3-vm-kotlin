@@ -31,6 +31,18 @@ class InstructionTest {
     }
 
     @Test
+    fun testLoadEffectiveAddressEncoding() {
+        // given
+        val encoding = (0b1110 shl 12).toUShort()
+
+        // when
+        val loadEffectiveAddress = Instruction.fetch(encoding)
+
+        // then
+        assertThat(loadEffectiveAddress).isInstanceOf(LoadEffectiveAddress::class.java)
+    }
+
+    @Test
     fun testLoadEncoding() {
         // given
         val encoding = (0b0010 shl 12).toUShort()
