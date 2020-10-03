@@ -43,7 +43,7 @@ class LoadIndirectTest {
     }
 
     @Test
-    fun testLoadIndirectZero() {
+    fun testLoadIndirectNegative() {
         // given
         val destinationRegister = 2
         val pcOffset = 250 and 0x1FF
@@ -66,7 +66,7 @@ class LoadIndirectTest {
     }
 
     @Test
-    fun testLoadIndirectNegative() {
+    fun testLoadIndirectZero() {
         // given
         val destinationRegister = 4
         val pcOffset = 150 and 0x1FF

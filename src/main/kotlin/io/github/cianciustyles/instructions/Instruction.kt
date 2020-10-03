@@ -10,6 +10,7 @@ abstract class Instruction {
         fun fetch(encoding: UShort): Instruction {
             return when (encoding.toInt() shr 12) {
                 0b0001 -> Add(encoding)
+                0b0010 -> Load(encoding)
                 0b1010 -> LoadIndirect(encoding)
                 else -> throw UnrecognisedInstructionException()
             }
@@ -26,5 +27,16 @@ abstract class Instruction {
         }
 
         return num.toShort()
+    }
+
+    fun loadAndSetConditionCodes(
+        memory: Memory,
+        registers: Registers,
+        sourceAddress: UShort,
+        destinationRegister: UShort
+    ) {
+        val valueToCopy = memory[sourceAddress]
+        registers[destinationRegister] = valueToCopy
+        registers.setCond(valueToCopy)
     }
 }

@@ -19,6 +19,18 @@ class InstructionTest {
     }
 
     @Test
+    fun testLoadEncoding() {
+        // given
+        val encoding = (0b0010 shl 12).toUShort()
+
+        // when
+        val load = Instruction.fetch(encoding)
+
+        // then
+        assertThat(load).isInstanceOf(Load::class.java)
+    }
+
+    @Test
     fun testLoadIndirectEncoding() {
         // given
         val encoding = (0b1010 shl 12).toUShort()
