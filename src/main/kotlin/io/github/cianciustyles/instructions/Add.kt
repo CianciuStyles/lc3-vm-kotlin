@@ -2,6 +2,7 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.Memory
 import io.github.cianciustyles.Registers
+import io.github.cianciustyles.Utils.extendSign
 
 @ExperimentalUnsignedTypes
 class Add(encoding: UShort) : Instruction() {
