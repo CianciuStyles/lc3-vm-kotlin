@@ -19,6 +19,18 @@ class InstructionTest {
     }
 
     @Test
+    fun testJumpEncoding() {
+        // given
+        val encoding = (0b1100 shl 12).toUShort()
+
+        // when
+        val jump = Instruction.fetch(encoding)
+
+        // then
+        assertThat(jump).isInstanceOf(Jump::class.java)
+    }
+
+    @Test
     fun testLoadBaseOffsetEncoding() {
         // given
         val encoding = (0b0110 shl 12).toUShort()
@@ -64,18 +76,6 @@ class InstructionTest {
 
         // then
         assertThat(loadIndirect).isInstanceOf(LoadIndirect::class.java)
-    }
-
-    @Test
-    fun testReturnFromSubroutineEncoding() {
-        // given
-        val encoding = (0b1100 shl 12).toUShort()
-
-        // when
-        val returnFromSubroutine = Instruction.fetch(encoding)
-
-        // then
-        assertThat(returnFromSubroutine).isInstanceOf(ReturnFromSubroutine::class.java)
     }
 
     @Test(expected = UnrecognisedInstructionException::class)
