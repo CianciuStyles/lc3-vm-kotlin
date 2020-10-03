@@ -60,10 +60,22 @@ class InstructionTest {
         val encoding = (0b1010 shl 12).toUShort()
 
         // when
-        val add = Instruction.fetch(encoding)
+        val loadIndirect = Instruction.fetch(encoding)
 
         // then
-        assertThat(add).isInstanceOf(LoadIndirect::class.java)
+        assertThat(loadIndirect).isInstanceOf(LoadIndirect::class.java)
+    }
+
+    @Test
+    fun testReturnFromSubroutineEncoding() {
+        // given
+        val encoding = (0b1100 shl 12).toUShort()
+
+        // when
+        val returnFromSubroutine = Instruction.fetch(encoding)
+
+        // then
+        assertThat(returnFromSubroutine).isInstanceOf(ReturnFromSubroutine::class.java)
     }
 
     @Test(expected = UnrecognisedInstructionException::class)

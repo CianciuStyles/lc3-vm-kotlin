@@ -13,6 +13,7 @@ abstract class Instruction {
                 0b0010 -> Load(encoding)
                 0b0110 -> LoadBaseOffset(encoding)
                 0b1010 -> LoadIndirect(encoding)
+                0b1100 -> ReturnFromSubroutine()
                 0b1110 -> LoadEffectiveAddress(encoding)
                 else -> throw UnrecognisedInstructionException()
             }
