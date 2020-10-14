@@ -90,6 +90,18 @@ class InstructionTest {
         assertThat(loadIndirect).isInstanceOf(LoadIndirect::class.java)
     }
 
+    @Test
+    fun testNotEncoding() {
+        // given
+        val encoding = (0b1001 shl 12).toUShort()
+
+        // when
+        val not = Instruction.fetch(encoding)
+
+        // then
+        assertThat(not).isInstanceOf(Not::class.java)
+    }
+
     @Test(expected = UnrecognisedInstructionException::class)
     fun testInvalidOpcode() {
         // given
