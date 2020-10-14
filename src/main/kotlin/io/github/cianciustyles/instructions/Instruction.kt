@@ -11,6 +11,7 @@ abstract class Instruction {
             return when (encoding.toInt() shr 12) {
                 0b0001 -> Add(encoding)
                 0b0010 -> Load(encoding)
+                0b0101 -> And(encoding)
                 0b0110 -> LoadBaseOffset(encoding)
                 0b1010 -> LoadIndirect(encoding)
                 0b1100 -> Jump(encoding)
@@ -31,5 +32,14 @@ abstract class Instruction {
         val valueToCopy = memory[sourceAddress]
         registers[destinationRegister] = valueToCopy
         registers.setCond(valueToCopy)
+    }
+
+    fun storeAndSetConditionCodes(
+        registers: Registers,
+        destinationRegister: UShort,
+        value: Short
+    ) {
+        registers[destinationRegister] = value
+        registers.setCond(value)
     }
 }

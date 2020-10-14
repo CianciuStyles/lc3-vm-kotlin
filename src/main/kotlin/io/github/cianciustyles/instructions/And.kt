@@ -2,10 +2,11 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.Memory
 import io.github.cianciustyles.Registers
-import io.github.cianciustyles.Utils.extendSign
+import io.github.cianciustyles.Utils
+import kotlin.experimental.and
 
 @ExperimentalUnsignedTypes
-class Add(encoding: UShort) : Instruction() {
+class And(val encoding: UShort) : Instruction() {
     val destinationRegister: UShort = (encoding.toInt() shr 9 and 0x7).toUShort()
     val sourceRegister1: UShort = (encoding.toInt() shr 6 and 0x7).toUShort()
     val mode: Mode
@@ -19,7 +20,7 @@ class Add(encoding: UShort) : Instruction() {
             immediateValue = null
         } else {
             sourceRegister2 = null
-            immediateValue = extendSign(encoding.toInt() and 0b11111, 5)
+            immediateValue = Utils.extendSign(encoding.toInt() and 0b11111, 5)
         }
     }
 
@@ -44,7 +45,7 @@ class Add(encoding: UShort) : Instruction() {
         storeAndSetConditionCodes(
             registers,
             destinationRegister,
-            (registers[sourceRegister1] + secondOperand).toShort()
+            registers[sourceRegister1] and secondOperand
         )
     }
 }

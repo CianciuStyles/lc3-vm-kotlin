@@ -19,6 +19,18 @@ class InstructionTest {
     }
 
     @Test
+    fun testAndEncoding() {
+        // given
+        val encoding = (0b0101 shl 12).toUShort()
+
+        // when
+        val and = Instruction.fetch(encoding)
+
+        // then
+        assertThat(and).isInstanceOf(And::class.java)
+    }
+
+    @Test
     fun testJumpEncoding() {
         // given
         val encoding = (0b1100 shl 12).toUShort()
