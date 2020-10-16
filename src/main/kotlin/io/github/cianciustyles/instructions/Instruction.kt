@@ -16,6 +16,7 @@ abstract class Instruction {
                 0b0110 -> LoadBaseOffset(encoding)
                 0b1001 -> Not(encoding)
                 0b1010 -> LoadIndirect(encoding)
+                0b1011 -> StoreIndirect(encoding)
                 0b1100 -> Jump(encoding)
                 0b1110 -> LoadEffectiveAddress(encoding)
                 else -> throw UnrecognisedInstructionException()
@@ -43,5 +44,13 @@ abstract class Instruction {
     ) {
         registers[destinationRegister] = value
         registers.setCond(value)
+    }
+
+    fun store(
+        memory: Memory,
+        address: UShort,
+        value: Short
+    ) {
+        memory[address] = value
     }
 }
