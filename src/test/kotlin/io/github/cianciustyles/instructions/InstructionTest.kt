@@ -102,6 +102,18 @@ class InstructionTest {
         assertThat(not).isInstanceOf(Not::class.java)
     }
 
+    @Test
+    fun testStoreEncoding() {
+        // given
+        val encoding = (0b0011 shl 12).toUShort()
+
+        // when
+        val store = Instruction.fetch(encoding)
+
+        // then
+        assertThat(store).isInstanceOf(Store::class.java)
+    }
+
     @Test(expected = UnrecognisedInstructionException::class)
     fun testInvalidOpcode() {
         // given
