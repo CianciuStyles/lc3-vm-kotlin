@@ -12,6 +12,7 @@ abstract class Instruction {
                 0b0001 -> Add(encoding)
                 0b0010 -> Load(encoding)
                 0b0011 -> Store(encoding)
+                0b0100 -> JumpToSubroutine(encoding)
                 0b0101 -> And(encoding)
                 0b0110 -> LoadBaseOffset(encoding)
                 0b1001 -> Not(encoding)

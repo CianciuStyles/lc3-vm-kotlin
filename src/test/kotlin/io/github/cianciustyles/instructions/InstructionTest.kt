@@ -43,6 +43,18 @@ class InstructionTest {
     }
 
     @Test
+    fun testJumpToSubroutineEncoding() {
+        // given
+        val encoding = (0b0100 shl 12).toUShort()
+
+        // when
+        val jumpToSubroutine = Instruction.fetch(encoding)
+
+        // then
+        assertThat(jumpToSubroutine).isInstanceOf(JumpToSubroutine::class.java)
+    }
+
+    @Test
     fun testLoadBaseOffsetEncoding() {
         // given
         val encoding = (0b0110 shl 12).toUShort()
