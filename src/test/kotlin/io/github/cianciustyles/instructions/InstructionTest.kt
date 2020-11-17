@@ -115,6 +115,18 @@ class InstructionTest {
     }
 
     @Test
+    fun testReturnFromInterruptEncoding() {
+        // given
+        val encoding = (0b1000 shl 12).toUShort()
+
+        // when
+        val returnFromInterrupt = Instruction.fetch(encoding)
+
+        // then
+        assertThat(returnFromInterrupt).isInstanceOf(ReturnFromInterrupt::class.java)
+    }
+
+    @Test
     fun testStoreBaseOffsetEncoding() {
         // given
         val encoding = (0b0111 shl 12).toUShort()
