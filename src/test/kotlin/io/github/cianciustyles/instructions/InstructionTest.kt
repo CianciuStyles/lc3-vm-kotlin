@@ -31,6 +31,18 @@ class InstructionTest {
     }
 
     @Test
+    fun testBranchEncoding() {
+        // given
+        val encoding = (0b0000 shl 12).toUShort()
+
+        // when
+        val branch = Instruction.fetch(encoding)
+
+        // then
+        assertThat(branch).isInstanceOf(Branch::class.java)
+    }
+
+    @Test
     fun testJumpEncoding() {
         // given
         val encoding = (0b1100 shl 12).toUShort()
@@ -165,7 +177,7 @@ class InstructionTest {
     @Test(expected = UnrecognisedInstructionException::class)
     fun testInvalidOpcode() {
         // given
-        val encoding: UShort = (16 shl 12).toUShort()
+        val encoding: UShort = (0b1101 shl 12).toUShort()
 
         // when
         Instruction.fetch(encoding)

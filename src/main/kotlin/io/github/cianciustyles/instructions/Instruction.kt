@@ -9,6 +9,7 @@ abstract class Instruction {
     companion object {
         fun fetch(encoding: UShort): Instruction {
             return when (encoding.toInt() shr 12) {
+                0b0000 -> Branch(encoding)
                 0b0001 -> Add(encoding)
                 0b0010 -> Load(encoding)
                 0b0011 -> Store(encoding)

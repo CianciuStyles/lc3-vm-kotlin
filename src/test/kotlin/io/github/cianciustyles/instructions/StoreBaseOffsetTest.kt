@@ -3,6 +3,7 @@ package io.github.cianciustyles.instructions
 import io.github.cianciustyles.Memory
 import io.github.cianciustyles.Registers
 import io.github.cianciustyles.Utils.extendSign
+import io.github.cianciustyles.Utils.shortPlus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -72,7 +73,4 @@ class StoreBaseOffsetTest {
 
     private fun encode(sourceRegister: Int, baseRegister: Int, offset6: Int) =
         ((0b1011 shl 12) or (sourceRegister shl 9) or (baseRegister shl 6) or offset6).toUShort()
-
-    private fun shortPlus(short1: Short, short2: Short): Short =
-        (short1 + short2).toShort()
 }

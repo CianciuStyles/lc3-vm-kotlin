@@ -3,6 +3,7 @@ package io.github.cianciustyles.instructions
 import io.github.cianciustyles.Memory
 import io.github.cianciustyles.Registers
 import io.github.cianciustyles.Utils.extendSign
+import io.github.cianciustyles.Utils.shortPlus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -88,7 +89,4 @@ class JumpToSubroutineTest {
 
     private fun encodeImmediate(pcOffset11: Int) =
         ((0b0100 shl 12) or (1 shl 11) or pcOffset11).toUShort()
-
-    private fun shortPlus(short1: Short, short2: Short): Short =
-        (short1 + short2).toShort()
 }

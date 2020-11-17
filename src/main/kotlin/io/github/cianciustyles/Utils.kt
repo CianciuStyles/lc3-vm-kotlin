@@ -10,4 +10,7 @@ object Utils {
 
         return num.toShort()
     }
+
+    fun shortPlus(short1: Short, short2: Short): Short =
+        (short1 + short2).toShort()
 }
