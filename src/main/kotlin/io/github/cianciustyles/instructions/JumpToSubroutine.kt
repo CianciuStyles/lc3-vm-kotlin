@@ -1,7 +1,6 @@
 package io.github.cianciustyles.instructions
 
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
 
 @ExperimentalUnsignedTypes
@@ -21,12 +20,12 @@ class JumpToSubroutine(val encoding: UShort) : Instruction() {
         }
     }
 
-    override fun execute(memory: Memory, registers: Registers) {
-        registers[7u] = registers.getPC()
+    override fun execute(vm: LC3VM) {
+        vm.registers[7u] = vm.registers.getPC()
         if (mode == Mode.REGISTER_MODE) {
-            registers.setPC(registers[baseRegister!!])
+            vm.registers.setPC(vm.registers[baseRegister!!])
         } else {
-            registers.setPC((registers.getPC() + pcOffset11!!).toShort())
+            vm.registers.setPC((vm.registers.getPC() + pcOffset11!!).toShort())
         }
     }
 

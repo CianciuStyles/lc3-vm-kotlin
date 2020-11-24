@@ -1,8 +1,7 @@
 package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.ConditionFlags
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -10,13 +9,11 @@ import kotlin.experimental.inv
 
 @ExperimentalUnsignedTypes
 class NotTest {
-    private lateinit var memory: Memory
-    private lateinit var registers: Registers
+    private lateinit var vm: LC3VM
 
     @Before
     fun setup() {
-        memory = Memory()
-        registers = Registers()
+        vm = LC3VM(running = true)
     }
 
     @Test
@@ -27,17 +24,17 @@ class NotTest {
         val encoding: UShort = encode(destinationRegister, sourceRegister)
 
         val value: Short = -1
-        registers[sourceRegister.toUShort()] = value
+        vm.registers[sourceRegister.toUShort()] = value
 
         // when
         val not = Not(encoding)
-        not.execute(memory, registers)
+        not.execute(vm)
 
         // then
         assertThat(not.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(not.sourceRegister).isEqualTo(sourceRegister.toUShort())
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(value.inv())
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(value.inv())
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
     }
 
     @Test
@@ -48,17 +45,17 @@ class NotTest {
         val encoding = encode(destinationRegister, sourceRegister)
 
         val value: Short = -5
-        registers[sourceRegister.toUShort()] = value
+        vm.registers[sourceRegister.toUShort()] = value
 
         // when
         val not = Not(encoding)
-        not.execute(memory, registers)
+        not.execute(vm)
 
         // then
         assertThat(not.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(not.sourceRegister).isEqualTo(sourceRegister.toUShort())
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(value.inv())
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(value.inv())
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
     }
 
     @Test
@@ -69,17 +66,17 @@ class NotTest {
         val encoding: UShort = encode(destinationRegister, sourceRegister)
 
         val value: Short = 5
-        registers[sourceRegister.toUShort()] = value
+        vm.registers[sourceRegister.toUShort()] = value
 
         // when
         val not = Not(encoding)
-        not.execute(memory, registers)
+        not.execute(vm)
 
         // then
         assertThat(not.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(not.sourceRegister).isEqualTo(sourceRegister.toUShort())
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(value.inv())
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.NEGATIVE.value)
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(value.inv())
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.NEGATIVE.value)
     }
 
     private fun encode(destinationRegister: Int, sourceRegister: Int) =

@@ -1,7 +1,6 @@
 package io.github.cianciustyles.instructions
 
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
 import io.github.cianciustyles.Utils.shortPlus
 import org.assertj.core.api.Assertions.assertThat
@@ -10,13 +9,11 @@ import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class StoreBaseOffsetTest {
-    private lateinit var memory: Memory
-    private lateinit var registers: Registers
+    private lateinit var vm: LC3VM
 
     @Before
     fun setup() {
-        memory = Memory()
-        registers = Registers()
+        vm = LC3VM(running = true)
     }
 
     @Test
@@ -29,20 +26,20 @@ class StoreBaseOffsetTest {
         val encoding = encode(sourceRegister, baseRegister, offset6)
 
         val expectedResult: Short = 123
-        registers[sourceRegister.toUShort()] = expectedResult
+        vm.registers[sourceRegister.toUShort()] = expectedResult
         val baseRegisterValue: Short = 0x400
-        registers[baseRegister.toUShort()] = baseRegisterValue
+        vm.registers[baseRegister.toUShort()] = baseRegisterValue
 
         // when
         val storeBaseOffset = StoreBaseOffset(encoding)
-        storeBaseOffset.execute(memory, registers)
+        storeBaseOffset.execute(vm)
 
         // then
         assertThat(storeBaseOffset.sourceRegister).isEqualTo(sourceRegister.toUShort())
         assertThat(storeBaseOffset.baseRegister).isEqualTo(baseRegister.toUShort())
         assertThat(storeBaseOffset.offset6).isEqualTo(offset6WithSignExtended)
         val storeMemoryAddress = shortPlus(baseRegisterValue, offset6WithSignExtended).toUShort()
-        assertThat(memory[storeMemoryAddress]).isEqualTo(expectedResult)
+        assertThat(vm.memory[storeMemoryAddress]).isEqualTo(expectedResult)
     }
 
     @Test
@@ -55,20 +52,20 @@ class StoreBaseOffsetTest {
         val encoding = encode(sourceRegister, baseRegister, offset6)
 
         val expectedResult: Short = 456
-        registers[sourceRegister.toUShort()] = expectedResult
+        vm.registers[sourceRegister.toUShort()] = expectedResult
         val baseRegisterValue: Short = 0x280
-        registers[baseRegister.toUShort()] = baseRegisterValue
+        vm.registers[baseRegister.toUShort()] = baseRegisterValue
 
         // when
         val storeBaseOffset = StoreBaseOffset(encoding)
-        storeBaseOffset.execute(memory, registers)
+        storeBaseOffset.execute(vm)
 
         // then
         assertThat(storeBaseOffset.sourceRegister).isEqualTo(sourceRegister.toUShort())
         assertThat(storeBaseOffset.baseRegister).isEqualTo(baseRegister.toUShort())
         assertThat(storeBaseOffset.offset6).isEqualTo(offset6WithSignExtended)
         val storeMemoryAddress = shortPlus(baseRegisterValue, offset6WithSignExtended).toUShort()
-        assertThat(memory[storeMemoryAddress]).isEqualTo(expectedResult)
+        assertThat(vm.memory[storeMemoryAddress]).isEqualTo(expectedResult)
     }
 
     private fun encode(sourceRegister: Int, baseRegister: Int, offset6: Int) =

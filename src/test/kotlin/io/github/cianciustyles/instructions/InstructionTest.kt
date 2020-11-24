@@ -174,6 +174,18 @@ class InstructionTest {
         assertThat(storeIndirect).isInstanceOf(StoreIndirect::class.java)
     }
 
+    @Test
+    fun testTrapEncoding() {
+        // given
+        val encoding = (0b1111 shl 12).toUShort()
+
+        // when
+        val trap = Instruction.fetch(encoding)
+
+        // then
+        assertThat(trap).isInstanceOf(Trap::class.java)
+    }
+
     @Test(expected = UnrecognisedInstructionException::class)
     fun testInvalidOpcode() {
         // given

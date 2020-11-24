@@ -1,7 +1,6 @@
 package io.github.cianciustyles.instructions
 
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.exceptions.UnrecognisedInstructionException
 
 @ExperimentalUnsignedTypes
@@ -23,38 +22,38 @@ abstract class Instruction {
                 0b1011 -> StoreIndirect(encoding)
                 0b1100 -> Jump(encoding)
                 0b1110 -> LoadEffectiveAddress(encoding)
+                0b1111 -> Trap(encoding)
                 else -> throw UnrecognisedInstructionException()
             }
         }
     }
 
-    abstract fun execute(memory: Memory, registers: Registers)
+    abstract fun execute(vm: LC3VM)
 
     fun loadAndSetConditionCodes(
-        memory: Memory,
-        registers: Registers,
+        vm: LC3VM,
         sourceAddress: UShort,
         destinationRegister: UShort
     ) {
-        val valueToCopy = memory[sourceAddress]
-        registers[destinationRegister] = valueToCopy
-        registers.setCond(valueToCopy)
+        val valueToCopy = vm.memory[sourceAddress]
+        vm.registers[destinationRegister] = valueToCopy
+        vm.registers.setCond(valueToCopy)
     }
 
     fun storeAndSetConditionCodes(
-        registers: Registers,
+        vm: LC3VM,
         destinationRegister: UShort,
         value: Short
     ) {
-        registers[destinationRegister] = value
-        registers.setCond(value)
+        vm.registers[destinationRegister] = value
+        vm.registers.setCond(value)
     }
 
     fun store(
-        memory: Memory,
+        vm: LC3VM,
         address: UShort,
         value: Short
     ) {
-        memory[address] = value
+        vm.memory[address] = value
     }
 }

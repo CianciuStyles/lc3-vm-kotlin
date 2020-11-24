@@ -1,7 +1,6 @@
 package io.github.cianciustyles.instructions
 
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
 import io.github.cianciustyles.Utils.shortPlus
 import org.assertj.core.api.Assertions.assertThat
@@ -10,13 +9,11 @@ import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class JumpToSubroutineTest {
-    private lateinit var memory: Memory
-    private lateinit var registers: Registers
+    private lateinit var vm: LC3VM
 
     @Before
     fun setup() {
-        memory = Memory()
-        registers = Registers()
+        vm = LC3VM(running = true)
     }
 
     @Test
@@ -26,20 +23,20 @@ class JumpToSubroutineTest {
         val encoding = encodeRegister(baseRegister)
 
         val pcInitialValue: Short = 0x750
-        registers.setPC(pcInitialValue)
+        vm.registers.setPC(pcInitialValue)
         val pcFinalValue: Short = 0x400
-        registers[baseRegister.toUShort()] = pcFinalValue
+        vm.registers[baseRegister.toUShort()] = pcFinalValue
 
         // when
         val jumpToSubroutine = JumpToSubroutine(encoding)
-        jumpToSubroutine.execute(memory, registers)
+        jumpToSubroutine.execute(vm)
 
         // then
         assertThat(jumpToSubroutine.mode).isEqualTo(JumpToSubroutine.Mode.REGISTER_MODE)
         assertThat(jumpToSubroutine.baseRegister).isEqualTo(baseRegister.toUShort())
         assertThat(jumpToSubroutine.pcOffset11).isNull()
-        assertThat(registers[7u]).isEqualTo(pcInitialValue)
-        assertThat(registers.getPC()).isEqualTo(pcFinalValue)
+        assertThat(vm.registers[7u]).isEqualTo(pcInitialValue)
+        assertThat(vm.registers.getPC()).isEqualTo(pcFinalValue)
     }
 
     @Test
@@ -49,18 +46,18 @@ class JumpToSubroutineTest {
         val encoding = encodeImmediate(pcOffset11)
 
         val pcInitialValue: Short = 0x600
-        registers.setPC(pcInitialValue)
+        vm.registers.setPC(pcInitialValue)
 
         // when
         val jumpToSubroutine = JumpToSubroutine(encoding)
-        jumpToSubroutine.execute(memory, registers)
+        jumpToSubroutine.execute(vm)
 
         // then
         assertThat(jumpToSubroutine.mode).isEqualTo(JumpToSubroutine.Mode.IMMEDIATE_MODE)
         assertThat(jumpToSubroutine.baseRegister).isNull()
         assertThat(jumpToSubroutine.pcOffset11).isEqualTo(extendSign(pcOffset11, 11))
-        assertThat(registers[7u]).isEqualTo(pcInitialValue)
-        assertThat(registers.getPC()).isEqualTo(shortPlus(pcInitialValue, extendSign(pcOffset11, 11)))
+        assertThat(vm.registers[7u]).isEqualTo(pcInitialValue)
+        assertThat(vm.registers.getPC()).isEqualTo(shortPlus(pcInitialValue, extendSign(pcOffset11, 11)))
     }
 
     @Test
@@ -70,18 +67,18 @@ class JumpToSubroutineTest {
         val encoding = encodeImmediate(pcOffset11)
 
         val pcInitialValue: Short = 0x800
-        registers.setPC(pcInitialValue)
+        vm.registers.setPC(pcInitialValue)
 
         // when
         val jumpToSubroutine = JumpToSubroutine(encoding)
-        jumpToSubroutine.execute(memory, registers)
+        jumpToSubroutine.execute(vm)
 
         // then
         assertThat(jumpToSubroutine.mode).isEqualTo(JumpToSubroutine.Mode.IMMEDIATE_MODE)
         assertThat(jumpToSubroutine.baseRegister).isNull()
         assertThat(jumpToSubroutine.pcOffset11).isEqualTo(extendSign(pcOffset11, 11))
-        assertThat(registers[7u]).isEqualTo(pcInitialValue)
-        assertThat(registers.getPC()).isEqualTo(shortPlus(pcInitialValue, extendSign(pcOffset11, 11)))
+        assertThat(vm.registers[7u]).isEqualTo(pcInitialValue)
+        assertThat(vm.registers.getPC()).isEqualTo(shortPlus(pcInitialValue, extendSign(pcOffset11, 11)))
     }
 
     private fun encodeRegister(baseRegister: Int) =

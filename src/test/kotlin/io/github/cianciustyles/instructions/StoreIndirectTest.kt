@@ -1,7 +1,6 @@
 package io.github.cianciustyles.instructions
 
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -9,13 +8,11 @@ import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class StoreIndirectTest {
-    private lateinit var memory: Memory
-    private lateinit var registers: Registers
+    private lateinit var vm: LC3VM
 
     @Before
     fun setup() {
-        memory = Memory()
-        registers = Registers()
+        vm = LC3VM(running = true)
     }
 
     @Test
@@ -26,20 +23,20 @@ class StoreIndirectTest {
         val encoding = encode(sourceRegister, pcOffset)
 
         val initialValue: Short = 600
-        registers.setPC(initialValue)
+        vm.registers.setPC(initialValue)
         val storeAddress: Short = 842
-        memory[(initialValue + pcOffset).toUShort()] = storeAddress
+        vm.memory[(initialValue + pcOffset).toUShort()] = storeAddress
         val expectedResult: Short = 42
-        registers[sourceRegister.toUShort()] = expectedResult
+        vm.registers[sourceRegister.toUShort()] = expectedResult
 
         // when
         val storeIndirect = StoreIndirect(encoding)
-        storeIndirect.execute(memory, registers)
+        storeIndirect.execute(vm)
 
         // then
         assertThat(storeIndirect.sourceRegister).isEqualTo(sourceRegister.toUShort())
         assertThat(storeIndirect.pcOffset).isEqualTo(pcOffset.toShort())
-        assertThat(memory[storeAddress.toUShort()]).isEqualTo(expectedResult)
+        assertThat(vm.memory[storeAddress.toUShort()]).isEqualTo(expectedResult)
     }
 
     @Test
@@ -50,20 +47,20 @@ class StoreIndirectTest {
         val encoding = encode(sourceRegister, pcOffset)
 
         val initialValue: Short = 600
-        registers.setPC(initialValue)
+        vm.registers.setPC(initialValue)
         val storeAddress: Short = 842
-        memory[(initialValue + extendSign(pcOffset, 9)).toUShort()] = storeAddress
+        vm.memory[(initialValue + extendSign(pcOffset, 9)).toUShort()] = storeAddress
         val expectedResult: Short = 42
-        registers[sourceRegister.toUShort()] = expectedResult
+        vm.registers[sourceRegister.toUShort()] = expectedResult
 
         // when
         val storeIndirect = StoreIndirect(encoding)
-        storeIndirect.execute(memory, registers)
+        storeIndirect.execute(vm)
 
         // then
         assertThat(storeIndirect.sourceRegister).isEqualTo(sourceRegister.toUShort())
         assertThat(storeIndirect.pcOffset).isEqualTo(extendSign(pcOffset, 9))
-        assertThat(memory[storeAddress.toUShort()]).isEqualTo(expectedResult)
+        assertThat(vm.memory[storeAddress.toUShort()]).isEqualTo(expectedResult)
     }
 
     private fun encode(sourceRegister: Int, pcOffset: Int) =

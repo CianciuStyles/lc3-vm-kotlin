@@ -1,20 +1,17 @@
 package io.github.cianciustyles.instructions
 
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class StoreTest {
-    private lateinit var memory: Memory
-    private lateinit var registers: Registers
+    private lateinit var vm: LC3VM
 
     @Before
     fun setup() {
-        memory = Memory()
-        registers = Registers()
+        vm = LC3VM(running = true)
     }
 
     @Test
@@ -25,18 +22,18 @@ class StoreTest {
         val encoding = encode(sourceRegister, pcOffset)
 
         val initialValue: Short = 750
-        registers.setPC(initialValue)
+        vm.registers.setPC(initialValue)
         val expectedResult: Short = 12
-        registers[sourceRegister.toUShort()] = expectedResult
+        vm.registers[sourceRegister.toUShort()] = expectedResult
 
         // when
         val store = Store(encoding)
-        store.execute(memory, registers)
+        store.execute(vm)
 
         // then
         assertThat(store.sourceRegister).isEqualTo(sourceRegister.toUShort())
         assertThat(store.pcOffset).isEqualTo(pcOffset.toShort())
-        assertThat(memory[(initialValue + pcOffset).toUShort()]).isEqualTo(expectedResult)
+        assertThat(vm.memory[(initialValue + pcOffset).toUShort()]).isEqualTo(expectedResult)
     }
 
     private fun encode(sourceRegister: Int, pcOffset: Int) =

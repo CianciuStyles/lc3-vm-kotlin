@@ -1,8 +1,7 @@
 package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.ConditionFlags
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
 import io.github.cianciustyles.Utils.shortPlus
 import org.assertj.core.api.Assertions.assertThat
@@ -11,13 +10,11 @@ import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class AddTest {
-    private lateinit var memory: Memory
-    private lateinit var registers: Registers
+    private lateinit var vm: LC3VM
 
     @Before
     fun setup() {
-        memory = Memory()
-        registers = Registers()
+        vm = LC3VM(running = true)
     }
 
     @Test
@@ -29,13 +26,13 @@ class AddTest {
         val encoding = encodeRegister(destinationRegister, sourceRegister1, sourceRegister2)
 
         val firstValue: Short = 4
-        registers[sourceRegister1.toUShort()] = firstValue
+        vm.registers[sourceRegister1.toUShort()] = firstValue
         val secondValue: Short = 2
-        registers[sourceRegister2.toUShort()] = secondValue
+        vm.registers[sourceRegister2.toUShort()] = secondValue
 
         // when
         val add = Add(encoding)
-        add.execute(memory, registers)
+        add.execute(vm)
 
         // then
         assertThat(add.destinationRegister).isEqualTo(destinationRegister.toUShort())
@@ -43,7 +40,7 @@ class AddTest {
         assertThat(add.mode).isEqualTo(Add.Mode.REGISTER_MODE)
         assertThat(add.sourceRegister2).isEqualTo(sourceRegister2.toUShort())
         assertThat(add.immediateValue).isNull()
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(firstValue, secondValue))
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(firstValue, secondValue))
     }
 
     @Test
@@ -55,11 +52,11 @@ class AddTest {
         val encoding = encodeImmediate(destinationRegister, sourceRegister1, immediateValue)
 
         val registerValue: Short = 1
-        registers[sourceRegister1.toUShort()] = registerValue
+        vm.registers[sourceRegister1.toUShort()] = registerValue
 
         // when
         val add = Add(encoding)
-        add.execute(memory, registers)
+        add.execute(vm)
 
         // then
         assertThat(add.destinationRegister).isEqualTo(destinationRegister.toUShort())
@@ -67,7 +64,7 @@ class AddTest {
         assertThat(add.mode).isEqualTo(Add.Mode.IMMEDIATE_MODE)
         assertThat(add.sourceRegister2).isNull()
         assertThat(add.immediateValue).isEqualTo(extendSign(immediateValue, 5))
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue, 5)))
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue, 5)))
     }
 
     @Test
@@ -79,11 +76,11 @@ class AddTest {
         val encoding = encodeImmediate(destinationRegister, sourceRegister1, immediateValue)
 
         val registerValue: Short = 3
-        registers[sourceRegister1.toUShort()] = registerValue
+        vm.registers[sourceRegister1.toUShort()] = registerValue
 
         // when
         val add = Add(encoding)
-        add.execute(memory, registers)
+        add.execute(vm)
 
         // then
         assertThat(add.destinationRegister).isEqualTo(destinationRegister.toUShort())
@@ -91,7 +88,7 @@ class AddTest {
         assertThat(add.mode).isEqualTo(Add.Mode.IMMEDIATE_MODE)
         assertThat(add.sourceRegister2).isNull()
         assertThat(add.immediateValue).isEqualTo(extendSign(immediateValue, 5))
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue, 5)))
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue, 5)))
     }
 
     @Test
@@ -102,14 +99,14 @@ class AddTest {
         val immediateValue = 0b11111 // -1 in 5 bytes
         val encoding: UShort = encodeImmediate(destinationRegister, sourceRegister1, immediateValue)
 
-        registers[sourceRegister1.toUShort()] = 1
+        vm.registers[sourceRegister1.toUShort()] = 1
 
         // when
         val add = Add(encoding)
-        add.execute(memory, registers)
+        add.execute(vm)
 
         // then
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
     }
 
     @Test
@@ -120,14 +117,14 @@ class AddTest {
         val immediateValue = 1
         val encoding = encodeImmediate(destinationRegister, sourceRegister1, immediateValue)
 
-        registers[sourceRegister1.toUShort()] = 3
+        vm.registers[sourceRegister1.toUShort()] = 3
 
         // when
         val add = Add(encoding)
-        add.execute(memory, registers)
+        add.execute(vm)
 
         // then
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
     }
 
     @Test
@@ -138,14 +135,14 @@ class AddTest {
         val immediateValue = 2
         val encoding: UShort = encodeImmediate(destinationRegister, sourceRegister1, immediateValue)
 
-        registers[sourceRegister1.toUShort()] = -4
+        vm.registers[sourceRegister1.toUShort()] = -4
 
         // when
         val add = Add(encoding)
-        add.execute(memory, registers)
+        add.execute(vm)
 
         // then
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.NEGATIVE.value)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.NEGATIVE.value)
     }
 
     private fun encodeRegister(destinationRegister: Int, sourceRegister1: Int, sourceRegister2: Int) =

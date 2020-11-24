@@ -1,7 +1,6 @@
 package io.github.cianciustyles.instructions
 
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils
 import kotlin.experimental.and
 
@@ -35,17 +34,17 @@ class And(val encoding: UShort) : Instruction() {
         }
     }
 
-    override fun execute(memory: Memory, registers: Registers) {
+    override fun execute(vm: LC3VM) {
         val secondOperand: Short = if (mode == Mode.REGISTER_MODE) {
-            registers[sourceRegister2!!]
+            vm.registers[sourceRegister2!!]
         } else {
             immediateValue!!
         }
 
         storeAndSetConditionCodes(
-            registers,
+            vm,
             destinationRegister,
-            registers[sourceRegister1] and secondOperand
+            vm.registers[sourceRegister1] and secondOperand
         )
     }
 }

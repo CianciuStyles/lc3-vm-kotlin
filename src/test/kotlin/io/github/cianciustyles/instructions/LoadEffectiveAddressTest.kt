@@ -1,8 +1,7 @@
 package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.ConditionFlags
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -10,13 +9,11 @@ import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class LoadEffectiveAddressTest {
-    private lateinit var memory: Memory
-    private lateinit var registers: Registers
+    private lateinit var vm: LC3VM
 
     @Before
     fun setup() {
-        memory = Memory()
-        registers = Registers()
+        vm = LC3VM(running = true)
     }
 
     @Test
@@ -27,17 +24,17 @@ class LoadEffectiveAddressTest {
         val encoding = encode(destinationRegister, pcOffset9)
 
         val expectedResult: Short = 7
-        memory[(registers.getPC() + pcOffset9).toUShort()] = expectedResult
+        vm.memory[(vm.registers.getPC() + pcOffset9).toUShort()] = expectedResult
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)
-        loadEffectiveAddress.execute(memory, registers)
+        loadEffectiveAddress.execute(vm)
 
         // then
         assertThat(loadEffectiveAddress.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(loadEffectiveAddress.pcOffset9).isEqualTo(extendSign(pcOffset9, 9))
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(expectedResult)
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(expectedResult)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
     }
 
     @Test
@@ -47,19 +44,19 @@ class LoadEffectiveAddressTest {
         val pcOffset9 = 190 and 0x1FF
         val encoding = encode(destinationRegister, pcOffset9)
 
-        registers.setPC(30)
+        vm.registers.setPC(30)
         val expectedResult: Short = -3
-        memory[(registers.getPC() + pcOffset9).toUShort()] = expectedResult
+        vm.memory[(vm.registers.getPC() + pcOffset9).toUShort()] = expectedResult
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)
-        loadEffectiveAddress.execute(memory, registers)
+        loadEffectiveAddress.execute(vm)
 
         // then
         assertThat(loadEffectiveAddress.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(loadEffectiveAddress.pcOffset9).isEqualTo(extendSign(pcOffset9, 9))
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(expectedResult)
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.NEGATIVE.value)
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(expectedResult)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.NEGATIVE.value)
     }
 
     @Test
@@ -69,19 +66,19 @@ class LoadEffectiveAddressTest {
         val pcOffset9 = 80 and 0x1FF
         val encoding = encode(destinationRegister, pcOffset9)
 
-        registers.setPC(100)
+        vm.registers.setPC(100)
         val expectedResult: Short = 0
-        memory[(registers.getPC() + pcOffset9).toUShort()] = expectedResult
+        vm.memory[(vm.registers.getPC() + pcOffset9).toUShort()] = expectedResult
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)
-        loadEffectiveAddress.execute(memory, registers)
+        loadEffectiveAddress.execute(vm)
 
         // then
         assertThat(loadEffectiveAddress.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(loadEffectiveAddress.pcOffset9).isEqualTo(extendSign(pcOffset9, 9))
-        assertThat(registers[destinationRegister.toUShort()]).isEqualTo(expectedResult)
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(expectedResult)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
     }
 
     private fun encode(destinationRegister: Int, pcOffset9: Int) =

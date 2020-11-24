@@ -1,21 +1,18 @@
 package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.ConditionFlags
-import io.github.cianciustyles.Memory
-import io.github.cianciustyles.Registers
+import io.github.cianciustyles.LC3VM
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class LoadTest {
-    private lateinit var memory: Memory
-    private lateinit var registers: Registers
+    private lateinit var vm: LC3VM
 
     @Before
     fun setup() {
-        memory = Memory()
-        registers = Registers()
+        vm = LC3VM(running = true)
     }
 
     @Test
@@ -26,17 +23,17 @@ class LoadTest {
         val encoding = encode(destinationRegister, pcOffset)
 
         val expectedResult: Short = 12
-        memory[(registers.getPC() + pcOffset).toUShort()] = expectedResult
+        vm.memory[(vm.registers.getPC() + pcOffset).toUShort()] = expectedResult
 
         // when
         val load = Load(encoding)
-        load.execute(memory, registers)
+        load.execute(vm)
 
         // then
         assertThat(load.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(load.pcOffset).isEqualTo(pcOffset.toShort())
-        assertThat(registers[load.destinationRegister]).isEqualTo(expectedResult)
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
+        assertThat(vm.registers[load.destinationRegister]).isEqualTo(expectedResult)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
     }
 
     @Test
@@ -46,19 +43,19 @@ class LoadTest {
         val pcOffset = 8 and 0x1FF
         val encoding = encode(destinationRegister, pcOffset)
 
-        registers.setPC(40)
+        vm.registers.setPC(40)
         val expectedValue: Short = 0
-        memory[(registers.getPC() + pcOffset).toUShort()] = expectedValue
+        vm.memory[(vm.registers.getPC() + pcOffset).toUShort()] = expectedValue
 
         // when
         val load = Load(encoding)
-        load.execute(memory, registers)
+        load.execute(vm)
 
         // then
         assertThat(load.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(load.pcOffset).isEqualTo(pcOffset.toShort())
-        assertThat(registers[load.destinationRegister]).isEqualTo(expectedValue)
-        assertThat(registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
+        assertThat(vm.registers[load.destinationRegister]).isEqualTo(expectedValue)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.ZERO.value)
     }
 
     private fun encode(destinationRegister: Int, pcOffset: Int) =
