@@ -2,6 +2,7 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
+import io.github.cianciustyles.Utils.shortPlus
 
 @ExperimentalUnsignedTypes
 class LoadEffectiveAddress(encoding: UShort) : Instruction() {
@@ -9,10 +10,10 @@ class LoadEffectiveAddress(encoding: UShort) : Instruction() {
     val pcOffset9: Short = extendSign(encoding.toInt() and 0x1FF, 9)
 
     override fun execute(vm: LC3VM) {
-        loadAndSetConditionCodes(
+        storeAndSetConditionCodes(
             vm,
-            (vm.registers.getPC() + pcOffset9).toUShort(),
-            destinationRegister
+            destinationRegister,
+            shortPlus(vm.registers.getPC(), pcOffset9)
         )
     }
 }

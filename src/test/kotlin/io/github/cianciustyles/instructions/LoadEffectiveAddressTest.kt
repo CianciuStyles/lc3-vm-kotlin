@@ -3,6 +3,7 @@ package io.github.cianciustyles.instructions
 import io.github.cianciustyles.ConditionFlags
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
+import io.github.cianciustyles.Utils.shortPlus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -22,9 +23,7 @@ class LoadEffectiveAddressTest {
         val destinationRegister = 5
         val pcOffset9 = 200 and 0x1FF
         val encoding = encode(destinationRegister, pcOffset9)
-
-        val expectedResult: Short = 7
-        vm.memory[(vm.registers.getPC() + pcOffset9).toUShort()] = expectedResult
+        val expectedResult = shortPlus(vm.registers.getPC(), extendSign(pcOffset9, 9))
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)
@@ -41,12 +40,11 @@ class LoadEffectiveAddressTest {
     fun testLoadEffectiveAddressNegative() {
         // given
         val destinationRegister = 2
-        val pcOffset9 = 190 and 0x1FF
+        val pcOffset9 = 0b111111111 // -1 in 9 bytes
         val encoding = encode(destinationRegister, pcOffset9)
 
         vm.registers.setPC(30)
-        val expectedResult: Short = -3
-        vm.memory[(vm.registers.getPC() + pcOffset9).toUShort()] = expectedResult
+        val expectedResult = shortPlus(vm.registers.getPC(), extendSign(pcOffset9, 9))
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)
@@ -56,19 +54,17 @@ class LoadEffectiveAddressTest {
         assertThat(loadEffectiveAddress.destinationRegister).isEqualTo(destinationRegister.toUShort())
         assertThat(loadEffectiveAddress.pcOffset9).isEqualTo(extendSign(pcOffset9, 9))
         assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(expectedResult)
-        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.NEGATIVE.value)
+        assertThat(vm.registers.getCond()).isEqualTo(ConditionFlags.POSITIVE.value)
     }
 
     @Test
     fun testLoadEffectiveAddressZero() {
         // given
         val destinationRegister = 4
-        val pcOffset9 = 80 and 0x1FF
+        val pcOffset9 = 0 and 0x1FF
         val encoding = encode(destinationRegister, pcOffset9)
 
-        vm.registers.setPC(100)
-        val expectedResult: Short = 0
-        vm.memory[(vm.registers.getPC() + pcOffset9).toUShort()] = expectedResult
+        val expectedResult = shortPlus(vm.registers.getPC(), extendSign(pcOffset9, 9))
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)
