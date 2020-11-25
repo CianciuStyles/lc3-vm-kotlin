@@ -16,7 +16,7 @@ class JumpToSubroutine(val encoding: UShort) : Instruction() {
             pcOffset11 = null
         } else {
             baseRegister = null
-            pcOffset11 = extendSign(encoding.toInt() and 0x1FF, 11)
+            pcOffset11 = extendSign(encoding.toInt() and 0x7FF, 11)
         }
     }
 

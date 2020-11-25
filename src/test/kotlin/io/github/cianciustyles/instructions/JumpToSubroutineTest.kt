@@ -63,7 +63,7 @@ class JumpToSubroutineTest {
     @Test
     fun testImmediateModeForNegativeNumbers() {
         // given
-        val pcOffset11 = 0x1FF // -1 in 11 bytes
+        val pcOffset11 = 0x7FF // -1 in 11 bytes
         val encoding = encodeImmediate(pcOffset11)
 
         val pcInitialValue: Short = 0x800
