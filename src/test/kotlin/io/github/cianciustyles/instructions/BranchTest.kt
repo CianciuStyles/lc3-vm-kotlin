@@ -19,7 +19,7 @@ class BranchTest {
     @Test
     fun testBranchOnNegative() {
         // given
-        val pcOffset9 = 0x350
+        val pcOffset9 = 0x130
         val pcOffset9WithSignExtended = extendSign(pcOffset9, 9)
         val encoding = encodeBranch(n = 1, z = 0, p = 0, pcOffset9 = pcOffset9)
 
@@ -65,7 +65,7 @@ class BranchTest {
     @Test
     fun testBranchOnZero() {
         // given
-        val pcOffset9 = 0x350
+        val pcOffset9 = 0x140
         val pcOffset9WithSignExtended = extendSign(pcOffset9, 9)
         val encoding = encodeBranch(n = 0, z = 1, p = 0, pcOffset9 = pcOffset9)
 

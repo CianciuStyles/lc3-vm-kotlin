@@ -6,9 +6,9 @@ import io.github.cianciustyles.Utils.extendSign
 
 @ExperimentalUnsignedTypes
 class Branch(val encoding: UShort) : Instruction() {
-    val negative: Boolean = (encoding.toInt() shr 11) == 1
-    val zero: Boolean = (encoding.toInt() shr 10) == 1
-    val positive: Boolean = (encoding.toInt() shr 9) == 1
+    val negative: Boolean = (encoding.toInt() shr 11) and 1 == 1
+    val zero: Boolean = (encoding.toInt() shr 10) and 1 == 1
+    val positive: Boolean = (encoding.toInt() shr 9) and 1 == 1
     val pcOffset9: Short = extendSign(encoding.toInt() and 0x1FF, 9)
 
     override fun execute(vm: LC3VM) {
