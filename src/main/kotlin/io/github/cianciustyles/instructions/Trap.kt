@@ -65,7 +65,7 @@ class Trap(
     }
 
     private fun halt(vm: LC3VM) {
-        print("HALT")
+        println("HALT")
         vm.running = false
     }
 }

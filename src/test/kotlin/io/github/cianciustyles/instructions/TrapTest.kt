@@ -48,7 +48,7 @@ class TrapTest {
         trap.execute(vm)
 
         // then
-        assertThat(output.toString()).isEqualTo("HALT")
+        assertThat(output.toString()).isEqualTo("HALT${System.lineSeparator()}")
         assertThat(vm.running).isEqualTo(false)
     }
 
