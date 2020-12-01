@@ -1,7 +1,6 @@
 package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
-import io.github.cianciustyles.Memory
 import io.github.cianciustyles.exceptions.UnrecognisedTrapException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -26,11 +25,9 @@ class TrapTest {
         // given
         val encoding = encodeTrap(Trap.GETC)
         val character = 's'
-        vm.memory[Memory.KBSR.toUShort()] = 1
-        vm.memory[Memory.KBDR.toUShort()] = character.toShort()
 
         // when
-        val trap = Trap(encoding)
+        val trap = Trap(encoding, readCharacter = { character.toShort() })
         trap.execute(vm)
 
         // then

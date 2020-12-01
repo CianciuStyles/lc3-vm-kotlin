@@ -1,7 +1,7 @@
 package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
-import io.github.cianciustyles.Memory
+import io.github.cianciustyles.Utils
 import io.github.cianciustyles.Utils.shortPlus
 import io.github.cianciustyles.exceptions.UnrecognisedTrapException
 import java.util.Scanner
@@ -10,6 +10,7 @@ import kotlin.experimental.and
 @ExperimentalUnsignedTypes
 class Trap(
     val encoding: UShort,
+    val readCharacter: (Boolean) -> Short = Utils::readCharacter,
     private val scanner: Scanner = Scanner(System.`in`)
 ) : Instruction() {
     companion object {
@@ -32,8 +33,7 @@ class Trap(
         }
 
     private fun getc(vm: LC3VM) {
-        val characterRead = vm.memory[Memory.KBDR.toUShort()] and 0xFF
-        vm.registers[0u] = characterRead
+        vm.registers[0u] = readCharacter.invoke(true)
     }
 
     private fun out(vm: LC3VM) {

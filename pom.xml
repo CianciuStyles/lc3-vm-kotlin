@@ -40,6 +40,11 @@
             <version>3.4.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -114,7 +119,7 @@
                 </executions>
                 <configuration>
                     <mainClass>${main.class}</mainClass>
-                    <commandlineArgs>lc3vm 2048.obj</commandlineArgs>
+                    <commandlineArgs>2048.obj</commandlineArgs>
                 </configuration>
             </plugin>
             <plugin>
