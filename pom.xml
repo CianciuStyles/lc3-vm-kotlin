@@ -121,6 +121,16 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>hangman</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>${main.class}</mainClass>
+                            <commandlineArgs>objs/hangman.obj</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>rogue</id>
                         <goals>
                             <goal>java</goal>
