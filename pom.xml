@@ -111,15 +111,26 @@
                 <version>1.2.1</version>
                 <executions>
                     <execution>
+                        <id>2048</id>
                         <goals>
                             <goal>java</goal>
                         </goals>
+                        <configuration>
+                            <mainClass>${main.class}</mainClass>
+                            <commandlineArgs>objs/2048.obj</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>rogue</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>${main.class}</mainClass>
+                            <commandlineArgs>objs/rogue.obj</commandlineArgs>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>${main.class}</mainClass>
-                    <commandlineArgs>2048.obj</commandlineArgs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
