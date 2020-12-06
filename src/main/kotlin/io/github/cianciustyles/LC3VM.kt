@@ -12,7 +12,7 @@ class LC3VM(
     val memory: Memory = Memory(),
     val registers: Registers = Registers(),
     var running: Boolean = false,
-    var pcStart: Short = 0x3000
+    private var pcStart: Short = 0x3000
 ) {
     fun run(vararg args: String) {
         loadParameters(*args)

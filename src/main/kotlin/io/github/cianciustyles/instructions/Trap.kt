@@ -22,8 +22,10 @@ class Trap(
         const val HALT = 0x25
     }
 
+    private val trap: Int = encoding.toInt() and 0xFF
+
     override fun execute(vm: LC3VM) =
-        when (encoding.toInt() and 0xFF) {
+        when (trap) {
             GETC -> getc(vm)
             OUT -> out(vm)
             PUTS -> puts(vm)
