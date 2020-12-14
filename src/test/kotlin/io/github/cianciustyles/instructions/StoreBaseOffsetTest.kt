@@ -2,7 +2,7 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
-import io.github.cianciustyles.Utils.shortPlus
+import io.github.cianciustyles.extensions.addShort
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -38,7 +38,7 @@ class StoreBaseOffsetTest {
         assertThat(storeBaseOffset.sourceRegister).isEqualTo(sourceRegister.toUShort())
         assertThat(storeBaseOffset.baseRegister).isEqualTo(baseRegister.toUShort())
         assertThat(storeBaseOffset.offset6).isEqualTo(offset6WithSignExtended)
-        val storeMemoryAddress = shortPlus(baseRegisterValue, offset6WithSignExtended).toUShort()
+        val storeMemoryAddress = (baseRegisterValue addShort offset6WithSignExtended).toUShort()
         assertThat(vm.memory[storeMemoryAddress]).isEqualTo(expectedResult)
     }
 
@@ -64,7 +64,7 @@ class StoreBaseOffsetTest {
         assertThat(storeBaseOffset.sourceRegister).isEqualTo(sourceRegister.toUShort())
         assertThat(storeBaseOffset.baseRegister).isEqualTo(baseRegister.toUShort())
         assertThat(storeBaseOffset.offset6).isEqualTo(offset6WithSignExtended)
-        val storeMemoryAddress = shortPlus(baseRegisterValue, offset6WithSignExtended).toUShort()
+        val storeMemoryAddress = (baseRegisterValue addShort offset6WithSignExtended).toUShort()
         assertThat(vm.memory[storeMemoryAddress]).isEqualTo(expectedResult)
     }
 

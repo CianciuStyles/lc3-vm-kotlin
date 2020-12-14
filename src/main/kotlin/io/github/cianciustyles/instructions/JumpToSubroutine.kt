@@ -2,6 +2,8 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
+import io.github.cianciustyles.extensions.addShort
+import io.github.cianciustyles.extensions.shr
 
 @ExperimentalUnsignedTypes
 class JumpToSubroutine(val encoding: UShort) : Instruction() {
@@ -10,9 +12,9 @@ class JumpToSubroutine(val encoding: UShort) : Instruction() {
     val pcOffset11: Short?
 
     init {
-        mode = Mode.valueOf(encoding.toInt() shr 11 and 0b1)
+        mode = Mode.valueOf(encoding shr 11 and 0x1u)
         if (mode == Mode.REGISTER_MODE) {
-            baseRegister = (encoding.toInt() shr 6 and 0b111).toUShort()
+            baseRegister = encoding shr 6 and 0x7u
             pcOffset11 = null
         } else {
             baseRegister = null
@@ -25,7 +27,7 @@ class JumpToSubroutine(val encoding: UShort) : Instruction() {
         if (mode == Mode.REGISTER_MODE) {
             vm.registers.setPC(vm.registers[baseRegister!!])
         } else {
-            vm.registers.setPC((vm.registers.getPC() + pcOffset11!!).toShort())
+            vm.registers.setPC(vm.registers.getPC() addShort pcOffset11!!)
         }
     }
 
@@ -34,8 +36,8 @@ class JumpToSubroutine(val encoding: UShort) : Instruction() {
         IMMEDIATE_MODE;
 
         companion object {
-            fun valueOf(value: Int): Mode {
-                return values()[value]
+            fun valueOf(value: UShort): Mode {
+                return values()[value.toInt()]
             }
         }
     }

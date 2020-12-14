@@ -2,8 +2,8 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils
-import io.github.cianciustyles.Utils.shortPlus
 import io.github.cianciustyles.exceptions.UnrecognisedTrapException
+import io.github.cianciustyles.extensions.addShort
 import java.util.Scanner
 import kotlin.experimental.and
 
@@ -49,7 +49,7 @@ class Trap(
         var currentCharacter = vm.memory[startAddress.toUShort()]
         while (currentCharacter > 0) {
             print(currentCharacter.toChar())
-            startAddress = shortPlus(startAddress, 1)
+            startAddress = startAddress addShort 1
             currentCharacter = vm.memory[startAddress.toUShort()]
         }
         System.out.flush()

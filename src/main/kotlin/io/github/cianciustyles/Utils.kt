@@ -13,9 +13,6 @@ object Utils {
         return num.toShort()
     }
 
-    fun shortPlus(short1: Short, short2: Short): Short =
-        (short1 + short2).toShort()
-
     fun readCharacter(wait: Boolean): Short =
         when (val characterRead = RawConsoleInput.read(wait)) {
             13 -> 10

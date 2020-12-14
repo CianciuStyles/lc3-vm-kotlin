@@ -3,7 +3,7 @@ package io.github.cianciustyles.instructions
 import io.github.cianciustyles.ConditionFlags
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
-import io.github.cianciustyles.Utils.shortPlus
+import io.github.cianciustyles.extensions.addShort
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +23,7 @@ class LoadEffectiveAddressTest {
         val destinationRegister = 5
         val pcOffset9 = 200 and 0x1FF
         val encoding = encode(destinationRegister, pcOffset9)
-        val expectedResult = shortPlus(vm.registers.getPC(), extendSign(pcOffset9, 9))
+        val expectedResult = vm.registers.getPC() addShort extendSign(pcOffset9, 9)
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)
@@ -44,7 +44,7 @@ class LoadEffectiveAddressTest {
         val encoding = encode(destinationRegister, pcOffset9)
 
         vm.registers.setPC(30)
-        val expectedResult = shortPlus(vm.registers.getPC(), extendSign(pcOffset9, 9))
+        val expectedResult = vm.registers.getPC() addShort extendSign(pcOffset9, 9)
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)
@@ -64,7 +64,7 @@ class LoadEffectiveAddressTest {
         val pcOffset9 = 0 and 0x1FF
         val encoding = encode(destinationRegister, pcOffset9)
 
-        val expectedResult = shortPlus(vm.registers.getPC(), extendSign(pcOffset9, 9))
+        val expectedResult = vm.registers.getPC() addShort extendSign(pcOffset9, 9)
 
         // when
         val loadEffectiveAddress = LoadEffectiveAddress(encoding)

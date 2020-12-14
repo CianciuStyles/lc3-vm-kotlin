@@ -2,7 +2,7 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
-import io.github.cianciustyles.Utils.shortPlus
+import io.github.cianciustyles.extensions.addShort
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -57,7 +57,7 @@ class JumpToSubroutineTest {
         assertThat(jumpToSubroutine.baseRegister).isNull()
         assertThat(jumpToSubroutine.pcOffset11).isEqualTo(extendSign(pcOffset11, 11))
         assertThat(vm.registers[7u]).isEqualTo(pcInitialValue)
-        assertThat(vm.registers.getPC()).isEqualTo(shortPlus(pcInitialValue, extendSign(pcOffset11, 11)))
+        assertThat(vm.registers.getPC()).isEqualTo(pcInitialValue addShort extendSign(pcOffset11, 11))
     }
 
     @Test
@@ -78,7 +78,7 @@ class JumpToSubroutineTest {
         assertThat(jumpToSubroutine.baseRegister).isNull()
         assertThat(jumpToSubroutine.pcOffset11).isEqualTo(extendSign(pcOffset11, 11))
         assertThat(vm.registers[7u]).isEqualTo(pcInitialValue)
-        assertThat(vm.registers.getPC()).isEqualTo(shortPlus(pcInitialValue, extendSign(pcOffset11, 11)))
+        assertThat(vm.registers.getPC()).isEqualTo(pcInitialValue addShort extendSign(pcOffset11, 11))
     }
 
     private fun encodeRegister(baseRegister: Int) =

@@ -1,7 +1,7 @@
 package io.github.cianciustyles
 
-import io.github.cianciustyles.Utils.shortPlus
 import io.github.cianciustyles.exceptions.NoCommandLineArgumentsException
+import io.github.cianciustyles.extensions.addShort
 import io.github.cianciustyles.instructions.Instruction
 import java.io.File
 import kotlin.experimental.and
@@ -21,7 +21,7 @@ class LC3VM(
         running = true
         while (running) {
             val encoding = memory[registers.getPC().toUShort()].toUShort()
-            registers.setPC(shortPlus(registers.getPC(), 1))
+            registers.setPC(registers.getPC() addShort  1)
             Instruction.fetch(encoding).execute(this)
         }
     }
@@ -37,7 +37,7 @@ class LC3VM(
         var currentAddress = pcStart
         for (index in 2 until program.size step 2) {
             memory[currentAddress.toUShort()] = combineBytes(program[index], program[index + 1])
-            currentAddress = shortPlus(currentAddress, 1)
+            currentAddress = currentAddress addShort 1
         }
     }
 

@@ -3,6 +3,7 @@ package io.github.cianciustyles.instructions
 import io.github.cianciustyles.ConditionFlags
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
+import io.github.cianciustyles.extensions.addShort
 
 @ExperimentalUnsignedTypes
 class Branch(val encoding: UShort) : Instruction() {
@@ -17,8 +18,7 @@ class Branch(val encoding: UShort) : Instruction() {
         val branchOnPositive = positive and (vm.registers.getCond() == ConditionFlags.POSITIVE.value)
 
         if (branchOnNegative or branchOnZero or branchOnPositive) {
-            val newPC = vm.registers.getPC() + pcOffset9
-            vm.registers.setPC(newPC.toShort())
+            vm.registers.setPC(vm.registers.getPC() addShort pcOffset9)
         }
     }
 }

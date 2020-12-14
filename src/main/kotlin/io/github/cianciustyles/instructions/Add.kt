@@ -2,19 +2,21 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
+import io.github.cianciustyles.extensions.addShort
+import io.github.cianciustyles.extensions.shr
 
 @ExperimentalUnsignedTypes
-class Add(encoding: UShort) : Instruction() {
-    val destinationRegister: UShort = (encoding.toInt() shr 9 and 0x7).toUShort()
-    val sourceRegister1: UShort = (encoding.toInt() shr 6 and 0x7).toUShort()
+class Add(val encoding: UShort) : Instruction() {
+    val destinationRegister: UShort = encoding shr 9 and 0x7u
+    val sourceRegister1: UShort = encoding shr 6 and 0x7u
     val mode: Mode
     val sourceRegister2: UShort?
     val immediateValue: Short?
 
     init {
-        mode = Mode.valueOf(encoding.toInt() shr 5 and 0x1)
+        mode = Mode.valueOf(encoding shr 5 and 0x1u)
         if (mode == Mode.REGISTER_MODE) {
-            sourceRegister2 = (encoding.toInt() and 0x7).toUShort()
+            sourceRegister2 = encoding and 0x7u
             immediateValue = null
         } else {
             sourceRegister2 = null
@@ -27,14 +29,14 @@ class Add(encoding: UShort) : Instruction() {
         IMMEDIATE_MODE;
 
         companion object {
-            fun valueOf(value: Int): Mode {
-                return values()[value]
+            fun valueOf(value: UShort): Mode {
+                return values()[value.toInt()]
             }
         }
     }
 
     override fun execute(vm: LC3VM) {
-        val secondOperand: Short = if (mode == Mode.REGISTER_MODE) {
+        val secondOperand = if (mode == Mode.REGISTER_MODE) {
             vm.registers[sourceRegister2!!]
         } else {
             immediateValue!!
@@ -43,7 +45,7 @@ class Add(encoding: UShort) : Instruction() {
         storeAndSetConditionCodes(
             vm,
             destinationRegister,
-            (vm.registers[sourceRegister1] + secondOperand).toShort()
+            vm.registers[sourceRegister1] addShort secondOperand
         )
     }
 }

@@ -2,7 +2,7 @@ package io.github.cianciustyles.instructions
 
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
-import io.github.cianciustyles.Utils.shortPlus
+import io.github.cianciustyles.extensions.addShort
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -36,7 +36,7 @@ class BranchTest {
         assertThat(branch.zero).isEqualTo(false)
         assertThat(branch.positive).isEqualTo(false)
         assertThat(branch.pcOffset9).isEqualTo(pcOffset9WithSignExtended)
-        assertThat(vm.registers.getPC()).isEqualTo(shortPlus(initialPC, pcOffset9WithSignExtended))
+        assertThat(vm.registers.getPC()).isEqualTo(initialPC addShort pcOffset9WithSignExtended)
     }
 
     @Test
@@ -82,7 +82,7 @@ class BranchTest {
         assertThat(branch.zero).isEqualTo(true)
         assertThat(branch.positive).isEqualTo(false)
         assertThat(branch.pcOffset9).isEqualTo(pcOffset9WithSignExtended)
-        assertThat(vm.registers.getPC()).isEqualTo(shortPlus(initialPC, pcOffset9WithSignExtended))
+        assertThat(vm.registers.getPC()).isEqualTo(initialPC addShort pcOffset9WithSignExtended)
     }
 
     @Test
@@ -128,7 +128,7 @@ class BranchTest {
         assertThat(branch.zero).isEqualTo(false)
         assertThat(branch.positive).isEqualTo(true)
         assertThat(branch.pcOffset9).isEqualTo(pcOffset9WithSignExtended)
-        assertThat(vm.registers.getPC()).isEqualTo(shortPlus(initialPC, pcOffset9WithSignExtended))
+        assertThat(vm.registers.getPC()).isEqualTo(initialPC addShort pcOffset9WithSignExtended)
     }
 
     @Test

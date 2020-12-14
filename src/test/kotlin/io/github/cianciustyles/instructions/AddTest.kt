@@ -3,7 +3,7 @@ package io.github.cianciustyles.instructions
 import io.github.cianciustyles.ConditionFlags
 import io.github.cianciustyles.LC3VM
 import io.github.cianciustyles.Utils.extendSign
-import io.github.cianciustyles.Utils.shortPlus
+import io.github.cianciustyles.extensions.addShort
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -40,7 +40,7 @@ class AddTest {
         assertThat(add.mode).isEqualTo(Add.Mode.REGISTER_MODE)
         assertThat(add.sourceRegister2).isEqualTo(sourceRegister2.toUShort())
         assertThat(add.immediateValue).isNull()
-        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(firstValue, secondValue))
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(firstValue addShort secondValue)
     }
 
     @Test
@@ -64,7 +64,7 @@ class AddTest {
         assertThat(add.mode).isEqualTo(Add.Mode.IMMEDIATE_MODE)
         assertThat(add.sourceRegister2).isNull()
         assertThat(add.immediateValue).isEqualTo(extendSign(immediateValue, 5))
-        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue, 5)))
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(registerValue addShort extendSign(immediateValue, 5))
     }
 
     @Test
@@ -88,7 +88,7 @@ class AddTest {
         assertThat(add.mode).isEqualTo(Add.Mode.IMMEDIATE_MODE)
         assertThat(add.sourceRegister2).isNull()
         assertThat(add.immediateValue).isEqualTo(extendSign(immediateValue, 5))
-        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(shortPlus(registerValue, extendSign(immediateValue, 5)))
+        assertThat(vm.registers[destinationRegister.toUShort()]).isEqualTo(registerValue addShort extendSign(immediateValue, 5))
     }
 
     @Test
